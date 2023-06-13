@@ -55,7 +55,7 @@ fun Route.authRoutes() {
                     val token = JwtConfig.generateToken(dbUser, secret)
                     return@post call.respond(
                         HttpStatusCode.Found, mapOf(
-                            "user" to user,
+                            "user" to dbUser,
                             "token" to token
                         )
                     )
