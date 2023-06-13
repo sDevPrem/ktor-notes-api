@@ -33,7 +33,7 @@ private fun Route.notesRoutes() {
             ?: return@get call.respond(HttpStatusCode.BadRequest, "Provide note id")
 
         return@get notesDao.getNotesById(id)?.let {
-            call.respond(HttpStatusCode.Found, it)
+            call.respond(HttpStatusCode.OK, it)
         } ?: call.respond(HttpStatusCode.NotFound)
     }
     post {
@@ -47,7 +47,7 @@ private fun Route.notesRoutes() {
         val id = call.parameters["id"]?.toInt()
             ?: return@delete call.respond(HttpStatusCode.BadRequest, "Provide note id")
         notesDao.deleteNote(id)
-        call.respond(HttpStatusCode.Accepted)
+        call.respond(HttpStatusCode.OK)
     }
     put("/{id}") {
         val id = call.parameters["id"]?.toInt()
@@ -55,7 +55,7 @@ private fun Route.notesRoutes() {
 
         val note = call.receive<Note>()
         notesDao.updateNote(id, note)
-        call.respond(HttpStatusCode.Accepted, note.also {
+        call.respond(HttpStatusCode.OK, note.also {
             it["id"] = id
         })
     }

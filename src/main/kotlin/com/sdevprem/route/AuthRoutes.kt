@@ -54,7 +54,7 @@ fun Route.authRoutes() {
                         return@post call.respond(HttpStatusCode.BadRequest, "Invalid Credentials")
                     val token = JwtConfig.generateToken(dbUser, secret)
                     return@post call.respond(
-                        HttpStatusCode.Found, mapOf(
+                        HttpStatusCode.Accepted, mapOf(
                             "user" to dbUser,
                             "token" to token
                         )
