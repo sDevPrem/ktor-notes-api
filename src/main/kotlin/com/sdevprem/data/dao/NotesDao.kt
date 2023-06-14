@@ -17,11 +17,12 @@ class NotesDao(
         }
         .map { NoteSchema.createEntity(it) }
 
-    fun getNotesById(id: Int) = db
+    fun getNotesById(uid: Int, id: Int) = db
         .from(NoteSchema)
         .select()
         .where {
-            NoteSchema.id eq id
+            (NoteSchema.uid eq uid) and
+                    (NoteSchema.id eq id)
         }
         .map { NoteSchema.createEntity(it) }
         .firstOrNull()
@@ -34,14 +35,21 @@ class NotesDao(
                 set(NoteSchema.title, note.title)
             } as Int
 
-    fun updateNote(id: Int, note: Note) =
+    fun updateNote(uid: Int, id: Int, note: Note) =
         db
             .update(NoteSchema) {
                 set(NoteSchema.description, note.description)
                 set(NoteSchema.title, note.title)
-                where { NoteSchema.id eq id }
+                where {
+                    (NoteSchema.uid eq uid) and
+                            (NoteSchema.id eq id)
+                }
             }
 
-    fun deleteNote(id: Int) =
-        db.delete(NoteSchema) { NoteSchema.id eq id }
+    fun deleteNote(uid: Int, id: Int) =
+        db.delete(NoteSchema)
+        {
+            (NoteSchema.uid eq uid) and
+                    (NoteSchema.id eq id)
+        }
 }

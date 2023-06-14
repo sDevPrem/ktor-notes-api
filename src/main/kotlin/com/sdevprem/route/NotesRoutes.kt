@@ -32,7 +32,7 @@ private fun Route.notesRoutes() {
         val id = call.parameters["id"]?.toInt()
             ?: return@get call.respond(HttpStatusCode.BadRequest, "Provide note id")
 
-        return@get notesDao.getNotesById(id)?.let {
+        return@get notesDao.getNotesById(call.getUid(), id)?.let {
             call.respond(HttpStatusCode.OK, it)
         } ?: call.respond(HttpStatusCode.NotFound)
     }
@@ -46,18 +46,25 @@ private fun Route.notesRoutes() {
     delete("/{id}") {
         val id = call.parameters["id"]?.toInt()
             ?: return@delete call.respond(HttpStatusCode.BadRequest, "Provide note id")
-        notesDao.deleteNote(id)
-        call.respond(HttpStatusCode.OK)
+        val rowsAffected = notesDao.deleteNote(call.getUid(), id)
+        if (rowsAffected < 1)
+            call.respond(HttpStatusCode.NotFound, "Cannot find notes for the given ID")
+        else
+            call.respond(HttpStatusCode.OK, "Note is deleted")
     }
     put("/{id}") {
         val id = call.parameters["id"]?.toInt()
             ?: return@put call.respond(HttpStatusCode.BadRequest, "Provide note id")
 
         val note = call.receive<Note>()
-        notesDao.updateNote(id, note)
-        call.respond(HttpStatusCode.OK, note.also {
-            it["id"] = id
-        })
+        val rowsAffected = notesDao.updateNote(call.getUid(), id, note)
+        if (rowsAffected < 1)
+            call.respond(HttpStatusCode.NotFound, "Cannot find notes for the given ID")
+        else
+            call.respond(HttpStatusCode.OK, note.also {
+                it["id"] = id
+            })
+
     }
 }
 
