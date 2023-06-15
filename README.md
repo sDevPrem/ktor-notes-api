@@ -31,4 +31,4 @@ It manages notes created by the users.
 ## More info
 
 This is the server side implementation. The client side is an [android](https://developer.android.com/) app which you
-can find [here](https://github.com/sDevPrem/ktor-notes-api).
+can find [here](https://github.com/sDevPrem/my-notes-mvvm-retrofit) to see this REST API in action.
