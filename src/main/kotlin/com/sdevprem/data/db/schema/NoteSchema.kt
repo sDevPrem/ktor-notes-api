@@ -1,4 +1,4 @@
-package com.sdevprem.data.schema
+package com.sdevprem.data.db.schema
 
 import com.sdevprem.data.model.Note
 import org.ktorm.schema.Table

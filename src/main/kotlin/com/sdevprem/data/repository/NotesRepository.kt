@@ -1,11 +1,11 @@
-package com.sdevprem.data.dao
+package com.sdevprem.data.repository
 
+import com.sdevprem.data.db.schema.NoteSchema
 import com.sdevprem.data.model.Note
-import com.sdevprem.data.schema.NoteSchema
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 
-class NotesDao(
+class NotesRepository(
     private val db: Database
 ) {
 

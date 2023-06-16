@@ -2,6 +2,7 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val ktorm_version = "3.6.0"
+val koin_version = "3.4.1"
 
 plugins {
     kotlin("jvm") version "1.8.22"
@@ -37,5 +38,9 @@ dependencies {
     implementation("org.ktorm:ktorm-support-mysql:${ktorm_version}")
     implementation("org.ktorm:ktorm-jackson:${ktorm_version}")
     implementation("com.mysql:mysql-connector-j:8.0.33")
+
+    implementation("io.insert-koin:koin-ktor:$koin_version")
+    implementation("io.insert-koin:koin-logger-slf4j:$koin_version")
+
 
 }

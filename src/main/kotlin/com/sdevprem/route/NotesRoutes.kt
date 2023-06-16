@@ -1,9 +1,8 @@
 package com.sdevprem.route
 
-import com.sdevprem.data.DBHelper
 import com.sdevprem.data.auth.jwt.JwtConfig
-import com.sdevprem.data.dao.NotesDao
 import com.sdevprem.data.model.Note
+import com.sdevprem.data.service.NotesService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -11,6 +10,7 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 
 fun Application.configureNotesRoute() {
     routing {
@@ -23,22 +23,22 @@ fun Application.configureNotesRoute() {
 }
 
 private fun Route.notesRoutes() {
-    val notesDao = NotesDao(DBHelper.database)
+    val notesService by inject<NotesService>()
 
     get {
-        return@get call.respond(HttpStatusCode.OK, notesDao.getNotes(call.getUid()))
+        return@get call.respond(HttpStatusCode.OK, notesService.getNotes(call.getUid()))
     }
     get("/{id}") {
         val id = call.parameters["id"]?.toInt()
             ?: return@get call.respond(HttpStatusCode.BadRequest, "Provide note id")
 
-        return@get notesDao.getNotesById(call.getUid(), id)?.let {
+        return@get notesService.getNoteById(call.getUid(), id)?.let {
             call.respond(HttpStatusCode.OK, it)
         } ?: call.respond(HttpStatusCode.NotFound)
     }
     post {
         val note = call.receive<Note>()
-        val newId = notesDao.insertNote(call.getUid(), note)
+        val newId = notesService.createNote(call.getUid(), note)
         call.respond(HttpStatusCode.Created, note.apply {
             this["id"] = newId
         })
@@ -46,7 +46,7 @@ private fun Route.notesRoutes() {
     delete("/{id}") {
         val id = call.parameters["id"]?.toInt()
             ?: return@delete call.respond(HttpStatusCode.BadRequest, "Provide note id")
-        val rowsAffected = notesDao.deleteNote(call.getUid(), id)
+        val rowsAffected = notesService.deleteNote(call.getUid(), id)
         if (rowsAffected < 1)
             call.respond(HttpStatusCode.NotFound, "Cannot find notes for the given ID")
         else
@@ -57,7 +57,7 @@ private fun Route.notesRoutes() {
             ?: return@put call.respond(HttpStatusCode.BadRequest, "Provide note id")
 
         val note = call.receive<Note>()
-        val rowsAffected = notesDao.updateNote(call.getUid(), id, note)
+        val rowsAffected = notesService.updateNote(call.getUid(), id, note)
         if (rowsAffected < 1)
             call.respond(HttpStatusCode.NotFound, "Cannot find notes for the given ID")
         else

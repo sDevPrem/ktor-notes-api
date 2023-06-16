@@ -1,4 +1,4 @@
-package com.sdevprem.data
+package com.sdevprem.data.db
 
 import io.ktor.server.application.*
 import org.ktorm.database.Database
