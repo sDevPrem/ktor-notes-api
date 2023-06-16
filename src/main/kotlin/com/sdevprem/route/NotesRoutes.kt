@@ -4,6 +4,7 @@ import com.sdevprem.data.DBHelper
 import com.sdevprem.data.auth.jwt.JwtConfig
 import com.sdevprem.data.model.Note
 import com.sdevprem.data.repository.NotesRepository
+import com.sdevprem.data.service.NotesService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -23,22 +24,22 @@ fun Application.configureNotesRoute() {
 }
 
 private fun Route.notesRoutes() {
-    val notesRepository = NotesRepository(DBHelper.database)
+    val notesService = NotesService(NotesRepository(DBHelper.database))
 
     get {
-        return@get call.respond(HttpStatusCode.OK, notesRepository.getNotes(call.getUid()))
+        return@get call.respond(HttpStatusCode.OK, notesService.getNotes(call.getUid()))
     }
     get("/{id}") {
         val id = call.parameters["id"]?.toInt()
             ?: return@get call.respond(HttpStatusCode.BadRequest, "Provide note id")
 
-        return@get notesRepository.getNotesById(call.getUid(), id)?.let {
+        return@get notesService.getNoteById(call.getUid(), id)?.let {
             call.respond(HttpStatusCode.OK, it)
         } ?: call.respond(HttpStatusCode.NotFound)
     }
     post {
         val note = call.receive<Note>()
-        val newId = notesRepository.insertNote(call.getUid(), note)
+        val newId = notesService.createNote(call.getUid(), note)
         call.respond(HttpStatusCode.Created, note.apply {
             this["id"] = newId
         })
@@ -46,7 +47,7 @@ private fun Route.notesRoutes() {
     delete("/{id}") {
         val id = call.parameters["id"]?.toInt()
             ?: return@delete call.respond(HttpStatusCode.BadRequest, "Provide note id")
-        val rowsAffected = notesRepository.deleteNote(call.getUid(), id)
+        val rowsAffected = notesService.deleteNote(call.getUid(), id)
         if (rowsAffected < 1)
             call.respond(HttpStatusCode.NotFound, "Cannot find notes for the given ID")
         else
@@ -57,7 +58,7 @@ private fun Route.notesRoutes() {
             ?: return@put call.respond(HttpStatusCode.BadRequest, "Provide note id")
 
         val note = call.receive<Note>()
-        val rowsAffected = notesRepository.updateNote(call.getUid(), id, note)
+        val rowsAffected = notesService.updateNote(call.getUid(), id, note)
         if (rowsAffected < 1)
             call.respond(HttpStatusCode.NotFound, "Cannot find notes for the given ID")
         else
