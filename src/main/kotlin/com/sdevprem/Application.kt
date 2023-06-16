@@ -1,6 +1,6 @@
 package com.sdevprem
 
-import com.sdevprem.data.DBHelper.configureDbVariable
+import com.sdevprem.data.db.DBHelper.configureDbVariable
 import com.sdevprem.plugins.*
 import com.sdevprem.route.configureNotesRoute
 import com.sdevprem.route.registerAuthRoute

@@ -1,6 +1,6 @@
 package com.sdevprem.di
 
-import com.sdevprem.data.DBHelper
+import com.sdevprem.data.db.DBHelper
 import com.sdevprem.data.repository.NotesRepository
 import com.sdevprem.data.repository.UserRepository
 import com.sdevprem.data.service.NotesService
