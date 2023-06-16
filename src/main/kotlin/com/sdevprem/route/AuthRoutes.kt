@@ -2,8 +2,8 @@ package com.sdevprem.route
 
 import com.sdevprem.data.DBHelper
 import com.sdevprem.data.auth.jwt.JwtConfig
-import com.sdevprem.data.dao.UserDao
 import com.sdevprem.data.model.User
+import com.sdevprem.data.repository.UserRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -14,17 +14,17 @@ import io.ktor.server.routing.*
 fun Route.authRoutes() {
     val secret = environment?.config?.propertyOrNull("jwt.secret")?.getString() ?: ""
     val db = DBHelper.database
-    val userDao = UserDao(db)
+    val userRepository = UserRepository(db)
 
     route("signup") {
         post {
             val user = call.receive<User>()
             try {
-                val isUserExist = userDao.isUserEmailExist(user.email)
+                val isUserExist = userRepository.isUserEmailExist(user.email)
                 if (isUserExist) {
                     return@post call.respond(HttpStatusCode.BadRequest, "User email already exist")
                 } else {
-                    val id = userDao.insertUser(user)
+                    val id = userRepository.insertUser(user)
                     val token = JwtConfig.generateToken(user.also {
                         it["id"] = id
                     }, secret)
@@ -46,7 +46,7 @@ fun Route.authRoutes() {
         post {
             val user = call.receive<User>()
             try {
-                val dbUser = userDao.getUserByEmail(user.email)
+                val dbUser = userRepository.getUserByEmail(user.email)
                 if (dbUser == null) {
                     return@post call.respond(HttpStatusCode.NotFound, "User not found")
                 } else {

@@ -1,4 +1,4 @@
-package com.sdevprem.data.dao
+package com.sdevprem.data.repository
 
 import com.sdevprem.data.model.User
 import com.sdevprem.data.schema.UserSchema
@@ -6,7 +6,7 @@ import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.entity.sequenceOf
 
-class UserDao(
+class UserRepository(
     private val db: Database
 ) {
 
