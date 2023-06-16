@@ -1,9 +1,7 @@
 package com.sdevprem.route
 
-import com.sdevprem.data.DBHelper
 import com.sdevprem.data.auth.jwt.JwtConfig
 import com.sdevprem.data.model.Note
-import com.sdevprem.data.repository.NotesRepository
 import com.sdevprem.data.service.NotesService
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -12,6 +10,7 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 
 fun Application.configureNotesRoute() {
     routing {
@@ -24,7 +23,7 @@ fun Application.configureNotesRoute() {
 }
 
 private fun Route.notesRoutes() {
-    val notesService = NotesService(NotesRepository(DBHelper.database))
+    val notesService by inject<NotesService>()
 
     get {
         return@get call.respond(HttpStatusCode.OK, notesService.getNotes(call.getUid()))

@@ -15,6 +15,7 @@ fun Application.module() {
     configureMonitoring()
     configureSecurity()
     configureDbVariable()
+    configureKoin()
     configureRouting()
     configureNotesRoute()
     registerAuthRoute()
