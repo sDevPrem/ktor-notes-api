@@ -3,6 +3,13 @@
 A simple REST APIs made with ktor for performing CRUD operation and authenticating users.
 It manages notes created by the users.
 
+## Features
+1. User Login / Signup 
+2. Perform CRUD operation on notes
+3. JWT Authentication
+4. Ktorm ORM for DB
+5. Dependency Injection using Koin 
+
 ## Build With
 
 [ktor server](https://ktor.io/docs/welcome.html) : Framework for building REST APIs.  
@@ -25,7 +32,8 @@ It manages notes created by the users.
    5. `JWT_REALM` - jwt realm
    6. `PORT` - (optional) For the port to use  
       OR you can edit the variables name according to your server in `/src/main/resources/application.conf` file.
-3. Deploy to the server that supports FatJar or Docker.
+3. Deploy to the server that supports FatJar or Docker OR open this project in IntelliJ IDEA, community or enterprise edition
+   and follow [these steps](https://ktor.io/docs/intellij-idea.html#run_app) to run the Application.
 
 [More info on Deployment of ktor project.](https://ktor.io/docs/deploy.html)
 
