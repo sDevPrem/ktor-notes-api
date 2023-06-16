@@ -9,7 +9,8 @@ It manages notes created by the users.
 [JSON Web Token](https://jwt.io/introduction) : To access the authenticated ends.  
 [Ktorm](https://www.ktorm.org/) : ORM for SQL database.  
 [Docker](https://ktor.io/docs/docker.html) : For Containerizing.  
-[Jackson](https://github.com/FasterXML/jackson) : For serialization and deserialization of JSON.
+[Jackson](https://github.com/FasterXML/jackson) : For serialization and deserialization of JSON.  
+[Koin](https://insert-koin.io/) : For dependency injection.
 
 ## Installation
 
