@@ -1,11 +1,14 @@
 package com.sdevprem.data.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.ktorm.entity.Entity
 
 interface User : Entity<User> {
     val id: Int
     val userName: String
     val email: String
+
+    @get:JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String
 
     fun copy(
