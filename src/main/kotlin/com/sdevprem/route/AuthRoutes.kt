@@ -23,13 +23,11 @@ fun Route.authRoutes() {
                 if (isUserExist) {
                     return@post call.respond(HttpStatusCode.BadRequest, "User email already exist")
                 } else {
-                    val id = userService.insertUser(user)
-                    val token = JwtConfig.generateToken(user.also {
-                        it["id"] = id
-                    }, secret)
+                    val newUser = userService.insertUser(user)
+                    val token = JwtConfig.generateToken(newUser, secret)
                     return@post call.respond(
                         HttpStatusCode.Created, mapOf(
-                            "user" to user,
+                            "user" to newUser,
                             "token" to token
                         )
                     )
@@ -49,12 +47,12 @@ fun Route.authRoutes() {
                 if (dbUser == null) {
                     return@post call.respond(HttpStatusCode.NotFound, "User not found")
                 } else {
-                    if (user.password != dbUser.password)
+                    if (!userService.isUserPasswordValid(user.password, dbUser.password))
                         return@post call.respond(HttpStatusCode.BadRequest, "Invalid Credentials")
                     val token = JwtConfig.generateToken(dbUser, secret)
                     return@post call.respond(
                         HttpStatusCode.Accepted, mapOf(
-                            "user" to dbUser,
+                            "user" to dbUser.copy(password = user.password),
                             "token" to token
                         )
                     )
