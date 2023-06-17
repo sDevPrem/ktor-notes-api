@@ -8,7 +8,8 @@ It manages notes created by the users.
 2. Perform CRUD operation on notes
 3. JWT Authentication
 4. Ktorm ORM for DB
-5. Dependency Injection using Koin 
+5. Dependency Injection using Koin
+6. Password Hashing using Bcrypt 
 
 ## Build With
 
@@ -17,7 +18,8 @@ It manages notes created by the users.
 [Ktorm](https://www.ktorm.org/) : ORM for SQL database.  
 [Docker](https://ktor.io/docs/docker.html) : For Containerizing.  
 [Jackson](https://github.com/FasterXML/jackson) : For serialization and deserialization of JSON.  
-[Koin](https://insert-koin.io/) : For dependency injection.
+[Koin](https://insert-koin.io/) : For dependency injection.  
+[Bcrypt](https://github.com/patrickfav/bcrypt): For password hashing.
 
 ## Installation
 
